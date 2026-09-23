@@ -3,7 +3,7 @@
 <div align="center">
 
 ![Total Versions](https://img.shields.io/badge/Archived_Versions-2-blue?style=for-the-badge&logo=git)
-![Master Status](https://img.shields.io/badge/Master_Resume-Ready_for_Upload-emerald?style=for-the-badge&logo=latex)
+![Master Status](https://img.shields.io/badge/Master_Resume-Active-emerald?style=for-the-badge&logo=latex)
 ![LaTeX Engine](https://img.shields.io/badge/Engine-Tectonic-purple?style=for-the-badge)
 ![Privacy](https://img.shields.io/badge/Access-Private_Repository-darkred?style=for-the-badge&logo=github)
 
@@ -22,10 +22,13 @@
 <div align="center">
   <p><b>Canonical Living Master Resume</b></p>
   <a href="master/resume.pdf">
-    <img src="assets/master_placeholder.svg" alt="Master Resume Preview" width="650" style="border: 1px solid #334155; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.15);" />
+    <img src="assets/master_preview.png" alt="Master Resume Preview" width="650" style="border: 1px solid #334155; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.15);" />
   </a>
   <p><i>Click the image above to open the full master PDF.</i></p>
 </div>
+
+> 💡 **Master Profile Highlights & Architecture**:  
+> Canonical 1-Page Master Resume (Updated Sep 24, 2026). Showcases 4 flagship engineering initiatives: Sahaiy (Hinglish enterprise AI call-agent on Vite & Supabase), IP-SAKTI Sahayak (Statutory Ayush IP RAG platform with 2048-dim NVIDIA Nemotron embeddings over 7 Qdrant collections & Sarvam AI for 22 Indic languages), Bharat Maps (SIH 2026 offline dead-reckoning navigation engine for GNSS-denied zones with 10Hz sensor fusion, MapLibre & OSRM), and Routed-Monitoring (multi-account LLM router across 28+ tools). Full-stack, agentic AI, and mobile/geospatial systems.
 
 <br/>
 
@@ -33,8 +36,8 @@
 
 | Metric | Status | Details |
 | :--- | :--- | :--- |
-| **Master Resume** | `⏳ Awaiting Files` | `master/resume.tex` & `master/resume.pdf` |
-| **Last Master Update** | `Awaiting ingestion` | Source of truth for all role-specific derivatives |
+| **Master Resume** | `✅ Synced` | `master/resume.tex` & `master/resume.pdf` |
+| **Last Master Update** | `2026-09-24` | Source of truth for all role-specific derivatives |
 | **Total Tailored Versions** | `2` | Tracked in [registry.json](registry.json) |
 | **Latest Tailored Role** | `v2_ayush_legal_rag` | Cataloged on `2026-09-24` |
 | **Compiler** | `Tectonic` | Standalone modern TeX/LaTeX engine |
