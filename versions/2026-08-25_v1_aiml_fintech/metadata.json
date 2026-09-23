@@ -1,0 +1,12 @@
+{
+  "id": "2026-08-25_v1_aiml_fintech",
+  "date": "2026-08-25",
+  "timestamp": "2026-09-24T03:30:02.567810",
+  "tag": "v1_aiml_fintech",
+  "description": "First cataloged version (Aug 25, 2026). AI & Fintech focus highlighting Sentinel (event-driven AML fraud detection via FastAPI, Kafka, Neo4j, Milvus), Polymarket-Algo (Binance latency arbitrage with LightGBM & K-Means), Sahaiy (Hinglish AI call-agent on Vite & Supabase), and Routed-Monitoring (multi-account LLM router across 28+ AI tools).",
+  "files": {
+    "tex": "versions/2026-08-25_v1_aiml_fintech/resume.tex",
+    "pdf": "versions/2026-08-25_v1_aiml_fintech/resume.pdf",
+    "preview": "versions/2026-08-25_v1_aiml_fintech/preview.png"
+  }
+}

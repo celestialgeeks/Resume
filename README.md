@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Total Versions](https://img.shields.io/badge/Archived_Versions-0-blue?style=for-the-badge&logo=git)
+![Total Versions](https://img.shields.io/badge/Archived_Versions-1-blue?style=for-the-badge&logo=git)
 ![Master Status](https://img.shields.io/badge/Master_Resume-Ready_for_Upload-emerald?style=for-the-badge&logo=latex)
 ![LaTeX Engine](https://img.shields.io/badge/Engine-Tectonic-purple?style=for-the-badge)
 ![Privacy](https://img.shields.io/badge/Access-Private_Repository-darkred?style=for-the-badge&logo=github)
@@ -35,8 +35,8 @@
 | :--- | :--- | :--- |
 | **Master Resume** | `⏳ Awaiting Files` | `master/resume.tex` & `master/resume.pdf` |
 | **Last Master Update** | `Awaiting ingestion` | Source of truth for all role-specific derivatives |
-| **Total Tailored Versions** | `0` | Tracked in [registry.json](registry.json) |
-| **Latest Tailored Role** | `None yet` | Cataloged on `—` |
+| **Total Tailored Versions** | `1` | Tracked in [registry.json](registry.json) |
+| **Latest Tailored Role** | `v1_aiml_fintech` | Cataloged on `2026-08-25` |
 | **Compiler** | `Tectonic` | Standalone modern TeX/LaTeX engine |
 
 ---
@@ -45,9 +45,9 @@
 
 | Date | Target / Company | Key Changes Made | Files |
 | :--- | :--- | :--- | :--- |
-| — | *No tailored versions yet* | *Drop version files into inbox/ and run ./archive.sh* | — |
+| `2026-08-25` | **v1_aiml_fintech** | First cataloged version (Aug 25, 2026). AI & Fintech focus highlighting Sentinel (event-driven AML fraud detection via FastAPI, Kafka, Neo4j, Milvus), Polymarket-Algo (Binance latency arbitrage with LightGBM & K-Means), Sahaiy (Hinglish AI call-agent on Vite & Supabase), and Routed-Monitoring (multi-account LLM router across 28+ AI tools). | [LaTeX](versions/2026-08-25_v1_aiml_fintech/resume.tex) · [PDF](versions/2026-08-25_v1_aiml_fintech/resume.pdf) |
 
-👉 **[View all 0 archived versions in the complete index (INDEX.md)](INDEX.md)**
+👉 **[View all 1 archived versions in the complete index (INDEX.md)](INDEX.md)**
 
 ---
 
