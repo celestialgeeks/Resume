@@ -1,0 +1,117 @@
+% =====================================================================
+% Shreyash Singh — Master Resume v3 (ONE PAGE, 2026-08-25)
+% Owner-provided structure: Contact -> Skills -> Projects (Sahaiy,
+%   Polymarket-Algo, Routed-Monitoring, IP-SAKTI Sahayak) ->
+%   Education (IPS Academy + IIT Madras Foundation) -> Certifications.
+% Typography hierarchy: 11pt body / LARGE bold name / scshape-bold sections
+% Margins: 0.5in sides, 0.55in top+bottom. MUST compile to exactly 1 page.
+% Facts: knowledge-pool.md only. No placeholders ship in output.
+% =====================================================================
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage{titlesec}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage[fleqn]{amsmath}
+\usepackage[english]{babel}
+\usepackage{geometry}
+\geometry{letterpaper,left=0.5in,right=0.5in,top=0.55in,bottom=0.55in}
+
+\ifdefined\pdfgentounicode
+  \input{glyphtounicode}
+  \pdfgentounicode=1
+\fi
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlist{leftmargin=0.18in,labelsep=0.45em,nosep,itemsep=2pt,topsep=3pt,partopsep=0pt,parsep=0pt}
+% Section heads: small caps + bold, hairline rule sits with clear space
+% below the title text (no negative pull so descenders like the "j" in
+% "Projects" are never sliced), then a controlled gap before body content.
+\titleformat{\section}{\raggedright\scshape\bfseries\large}{}{0em}{}[{\vspace{1pt}\color{black}\titlerule[0.7pt]}]
+\titlespacing{\section}{0pt}{7pt}{4pt}
+
+\begin{document}
+
+% ----- Contact: two stacked lines to avoid overfull hbox -----
+\begin{center}
+  {\LARGE \bfseries Shreyash Singh}\\[3pt]
+  \href{mailto:shreyashsingh755@gmail.com}{shreyashsingh755@gmail.com} \,$|$\, +91-9302940213 \\
+  \href{https://linkedin.com/in/shreyash-singh755}{linkedin.com/in/shreyash-singh755} \,$|$\,
+  \href{https://github.com/celestialgeeks}{github.com/celestialgeeks} \,$|$\, Indore, India
+\end{center}
+
+% ----- Skills: four compact grouped lines -----
+\section{Technical Skills}
+\begin{itemize}
+  \item \textbf{Languages:} Python, TypeScript, JavaScript, SQL, Bash
+  \item \textbf{Frontend \& Backend:} Redux Toolkit, Vite, Vanilla JS (ES Modules), FastAPI, Express,
+        REST APIs, Prisma, Supabase, PostgreSQL, MySQL, MongoDB, Redis, Kafka
+  \item \textbf{AI / LLM \& Automation:} LangChain, RAG, vector search, tool-use agents,
+        agentic workflows, multi-agent orchestration, MCP (Model Context Protocol), NumPy, Pandas,
+        n8n, context engineering
+  \item \textbf{DevOps \& Tools:} Git, Docker, Kubernetes, GitHub Actions, Vercel, Prometheus/Grafana
+\end{itemize}
+
+% ----- Projects: four, ordered per request (Sahaiy first, IP-SAKTI Sahayak last) -----
+\section{Projects}
+\textbf{Sahaiy -- AI Call-Agent Platform} \\
+\hspace*{0.15in}\textit{Vite 5, Vanilla JS ES Modules, Supabase (PostgreSQL, Realtime, Auth)}
+\begin{itemize}[leftmargin=0.32in,labelsep=0.45em,itemsep=2pt,topsep=2pt,partopsep=0pt,parsep=0pt]
+  \item Built and deployed a multi-page enterprise call-agent platform on Vercel with Hinglish
+        (Hindi/English) UX, schema.sql bootstrap, and env-flow architecture via src/config/env.js.
+  \item Structured styling with CSS custom properties and BEM naming conventions for a maintainable,
+        themeable design system spanning every page.
+\end{itemize}
+
+\vspace{1pt}
+\textbf{Polymarket-Algo -- Prediction-Market Latency Arbitrage} \\
+\hspace*{0.15in}\textit{Python, LightGBM, K-Means Clustering, Time-Series ML} \hfill Personal Project
+\begin{itemize}[leftmargin=0.32in,labelsep=0.45em,itemsep=2pt,topsep=2pt,partopsep=0pt,parsep=0pt]
+  \item Identified and exploited a 10--30s pricing lag between Polymarket BTC prediction markets
+        and Binance spot price, building a live signal pipeline to flag mispriced YES/NO contracts.
+  \item Designed a two-stage model -- K-Means market-regime detection feeding a LightGBM classifier
+        for YES/NO probability -- validated with leakage-free time-series cross-validation to
+        guard against look-ahead bias.
+\end{itemize}
+
+\vspace{1pt}
+\textbf{Routed-Monitoring -- Multi-Account LLM Router} \\
+\hspace*{0.15in}\textit{JavaScript} \hfill Open-Source Contribution
+\begin{itemize}[leftmargin=0.32in,labelsep=0.45em,itemsep=2pt,topsep=2pt,partopsep=0pt,parsep=0pt]
+  \item Contributed multi-account Ollama support to the open-source Token Monitor repo, then built
+        a custom fork enabling request routing across multiple Ollama accounts directly through
+        its UI.
+  \item Extended the Token Monitor UI to track usage and rate limits across 28+ AI coding tools
+        (Claude Code, Codex, OpenCode) with multi-device sync.
+\end{itemize}
+
+\vspace{1pt}
+\textbf{IP-SAKTI Sahayak -- AI Legal Intelligence Platform for Ayush IP} \\
+\hspace*{0.15in}\textit{Python, FastAPI, Next.js, TypeScript, Qdrant, NVIDIA NIM, Supabase, Docker} \hfill Solo Project
+\begin{itemize}[leftmargin=0.32in,labelsep=0.45em,itemsep=2pt,topsep=2pt,partopsep=0pt,parsep=0pt]
+  \item Built and deployed a citation-grounded RAG platform for patent agents and Ayush practitioners,
+        delivering statutory analysis and prior-art screening (Patents Act Sec.~3(p)) over seven
+        segregated Qdrant collections (2048-dim NVIDIA Nemotron embeddings) with strict
+        India/International jurisdiction isolation.
+  \item Engineered a deterministic citation verifier, a multi-factor confidence scorer (similarity, citation
+        coverage, source authority), and an SSE stream that filters model reasoning artifacts in real time.
+  \item Integrated Sarvam AI for queries in 22 Indic languages; built a formulation classifier and a
+        Biological Diversity Act ABS compliance checker; containerized with Docker and tested with Pytest.
+\end{itemize}
+
+% ----- Education: dual program, five lines -----
+\section{Education}
+\textbf{B.Tech, Computer Science \& Engineering (AI \& ML)} \hfill \textbf{Expected Jun 2027} \\
+IPS Academy, Indore -- RGPV University \hfill CGPA: 7.0/10 \\
+\textit{Coursework:} DBMS $\cdot$ Operating Systems $\cdot$ DSA $\cdot$ Machine Learning $\cdot$ Distributed Systems \\[3pt]
+\textbf{BS in Data Science \& Applications -- Foundation Level} \hfill \textbf{Expected Sep 2026} \\
+Indian Institute of Technology (IIT) Madras \hfill CGPA: 6.2/10
+
+% ----- Certifications -----
+\section{Certifications}
+\textbf{Introduction to Internet of Things} -- NPTEL, IIT Kharagpur \textit{(Elite, 66\%)} \hfill Jan--Apr 2026
+
+\end{document}

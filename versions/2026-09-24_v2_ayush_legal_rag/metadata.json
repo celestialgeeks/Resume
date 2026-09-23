@@ -1,0 +1,12 @@
+{
+  "id": "2026-09-24_v2_ayush_legal_rag",
+  "date": "2026-09-24",
+  "timestamp": "2026-09-24T03:35:19.079887",
+  "tag": "v2_ayush_legal_rag",
+  "description": "Updated resume version (Sep 24, 2026). Replaced Sentinel with IP-SAKTI Sahayak (AI Legal Intelligence Platform for Ayush IP / SIH 2026 solo project) featuring citation-grounded RAG with 2048-dim NVIDIA Nemotron embeddings across 7 Qdrant collections, Patents Act Sec 3(p) prior-art analysis, Sarvam AI 22 Indic languages, and Biological Diversity Act ABS compliance.",
+  "files": {
+    "tex": "versions/2026-09-24_v2_ayush_legal_rag/resume.tex",
+    "pdf": "versions/2026-09-24_v2_ayush_legal_rag/resume.pdf",
+    "preview": "versions/2026-09-24_v2_ayush_legal_rag/preview.png"
+  }
+}
