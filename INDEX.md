@@ -4,7 +4,14 @@
 
 **Total Archived Versions:** `2` | **Last Cataloged:** `2026-09-24 03:38`
 
+### 🌟 Canonical Master Resume
+- **Status:** `✅ Active & Synced` | **Updated:** `2026-09-24`
+- **Highlights:** Canonical 1-Page Master Resume (Updated Sep 24, 2026). Showcases 4 flagship engineering initiatives: Sahaiy (Hinglish enterprise AI call-agent on Vite & Supabase), IP-SAKTI Sahayak (Statutory Ayush IP RAG platform with 2048-dim NVIDIA Nemotron embeddings over 7 Qdrant collections & Sarvam AI for 22 Indic languages), Bharat Maps (SIH 2026 offline dead-reckoning navigation engine for GNSS-denied zones with 10Hz sensor fusion, MapLibre & OSRM), and Routed-Monitoring (multi-account LLM router across 28+ tools). Full-stack, agentic AI, and mobile/geospatial systems.
+- **Files:** [LaTeX Source](master/resume.tex) · [Download PDF](master/resume.pdf) · [Preview Image](assets/master_preview.png)
+
 ---
+
+### 🗂 Tailored Versions Archive
 
 | Date | Target / Tag | Description of Changes | Files | Preview |
 | :--- | :--- | :--- | :--- | :--- |

@@ -99,11 +99,27 @@ def sync_markdown_docs(registry):
         "",
         f"**Total Archived Versions:** `{total_versions}` | **Last Cataloged:** `{datetime.now().strftime('%Y-%m-%d %H:%M')}`",
         "",
-        "---",
-        "",
+    ]
+
+    if master_info and (MASTER_DIR / "resume.pdf").exists():
+        index_lines.extend([
+            "### 🌟 Canonical Master Resume",
+            f"- **Status:** `✅ Active & Synced` | **Updated:** `{master_info.get('updated', 'N/A')}`",
+            f"- **Highlights:** {master_info.get('description', '')}",
+            "- **Files:** [LaTeX Source](master/resume.tex) · [Download PDF](master/resume.pdf) · [Preview Image](assets/master_preview.png)",
+            "",
+            "---",
+            "",
+            "### 🗂 Tailored Versions Archive",
+            "",
+        ])
+    else:
+        index_lines.extend(["---", ""])
+
+    index_lines.extend([
         "| Date | Target / Tag | Description of Changes | Files | Preview |",
         "| :--- | :--- | :--- | :--- | :--- |",
-    ]
+    ])
 
     if not sorted_versions:
         index_lines.append("| — | *No versions archived yet* | *Drop files into inbox/ and run ./archive.sh* | — | — |")
@@ -147,8 +163,16 @@ def sync_markdown_docs(registry):
     preview_img_rel = "assets/master_preview.png" if master_preview_exists else "assets/master_placeholder.svg"
 
     master_date_str = master_info.get("updated", "Awaiting ingestion") if master_info else ("Present" if master_has_pdf else "Awaiting ingestion")
+    master_desc = master_info.get("description", "") if master_info else ""
     latest_v_str = sorted_versions[0].get("tag", "None yet") if sorted_versions else "None yet"
     latest_v_date = sorted_versions[0].get("date", "—") if sorted_versions else "—"
+
+    master_desc_callout = ""
+    if master_desc:
+        master_desc_callout = f"""
+> 💡 **Master Profile Highlights & Architecture**:  
+> {master_desc}
+"""
 
     readme_content = f"""# 📄 Master Resume & Version Catalog
 
@@ -178,7 +202,7 @@ def sync_markdown_docs(registry):
   </a>
   <p><i>Click the image above to open the full master PDF.</i></p>
 </div>
-
+{master_desc_callout}
 <br/>
 
 ### 📊 Repository Summary & Factors
@@ -297,13 +321,13 @@ tectonic versions/2026-09-24_google-swe/resume.tex
         f.write(readme_content.strip() + "\n")
 
 
-def archive_master(tex_path=None, pdf_path=None, push=True):
+def archive_master(tex_path=None, pdf_path=None, description=None, push=True):
     """Processes master resume files into master/ and regenerates preview and docs."""
     print("🚀 Ingesting Master Resume...")
     MASTER_DIR.mkdir(parents=True, exist_ok=True)
     ASSETS_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Resolve tex and pdf paths
+    # 1. Resolve tex and pdf paths
     if not tex_path or not pdf_path:
         # Check inbox first
         inbox_tex, inbox_pdf = find_inbox_files()
@@ -314,8 +338,15 @@ def archive_master(tex_path=None, pdf_path=None, push=True):
 
     if not tex_path and (MASTER_DIR / "resume.tex").exists():
         tex_path = str(MASTER_DIR / "resume.tex")
-    if not pdf_path and (MASTER_DIR / "resume.pdf").exists():
-        pdf_path = str(MASTER_DIR / "resume.pdf")
+    
+    # Check if a pdf already exists in master/ (handle 'resume (2).pdf' or similar)
+    if not pdf_path:
+        if (MASTER_DIR / "resume.pdf").exists():
+            pdf_path = str(MASTER_DIR / "resume.pdf")
+        else:
+            master_pdfs = [f for f in MASTER_DIR.iterdir() if f.is_file() and f.suffix.lower() == ".pdf"]
+            if master_pdfs:
+                pdf_path = str(master_pdfs[0])
 
     if not tex_path or not os.path.exists(tex_path):
         print("❌ Error: Missing master .tex file.")
@@ -337,11 +368,23 @@ def archive_master(tex_path=None, pdf_path=None, push=True):
 
     if os.path.abspath(pdf_path) != os.path.abspath(dest_pdf):
         shutil.copy2(pdf_path, dest_pdf)
-        if str(pdf_path).startswith(str(INBOX_DIR)):
+        if str(pdf_path).startswith(str(INBOX_DIR)) or str(pdf_path).startswith(str(MASTER_DIR)):
             try:
                 os.remove(pdf_path)
             except OSError:
                 pass
+
+    # Prompt description if missing and interactive
+    if not description:
+        try:
+            val = input("📝 Enter description/summary for the Master Resume: ").strip()
+            if val:
+                description = val
+        except (KeyboardInterrupt, EOFError):
+            pass
+
+    if not description:
+        description = "Canonical Master Resume: 4 core projects (Sahaiy, IP-SAKTI Sahayak, Bharat Maps, Routed-Monitoring), Full-Stack, AI/LLM agentic workflows, and Mobile/Geospatial engineering."
 
     # Generate preview
     print("🎨 Generating high-res preview of master PDF...")
@@ -355,6 +398,7 @@ def archive_master(tex_path=None, pdf_path=None, push=True):
     registry["master"] = {
         "updated": today_str,
         "timestamp": now_iso,
+        "description": description,
         "files": {
             "tex": "master/resume.tex",
             "pdf": "master/resume.pdf",
@@ -367,14 +411,18 @@ def archive_master(tex_path=None, pdf_path=None, push=True):
     # Git commit
     print("📦 Staging master updates in Git...")
     run_git_command(["add", "master/", "assets/", "registry.json", "README.md", "INDEX.md"])
-    success, _, _ = run_git_command(["commit", "-m", f"update(master): updated canonical resume [{today_str}]"])
+    commit_msg = f"update(master): updated canonical resume [{today_str}] - {description[:60]}"
+    success, _, _ = run_git_command(["commit", "-m", commit_msg])
     if success:
-        print("✅ Git commit created.")
+        print(f"✅ Git commit created: {commit_msg}")
         if push:
             print("🌐 Pushing changes to remote...")
             run_git_command(["push"])
     else:
         print("ℹ️ No new changes to commit in git.")
+
+    print(f"🎉 Master resume successfully updated & documented!")
+    return True
 
     print(f"🎉 Master resume successfully updated & documented!")
     return True
@@ -531,7 +579,7 @@ def main():
     push_to_git = not args.no_push
 
     if args.master:
-        archive_master(tex_path=args.tex, pdf_path=args.pdf, push=push_to_git)
+        archive_master(tex_path=args.tex, pdf_path=args.pdf, description=args.desc, push=push_to_git)
     else:
         archive_version(
             tex_path=args.tex,
