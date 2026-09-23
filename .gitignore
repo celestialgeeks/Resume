@@ -1,0 +1,42 @@
+# macOS & System Files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+Thumbs.db
+
+# LaTeX Build Artifacts
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.xdv
+*.fmt
+*.fot
+
+# Tectonic cache
+.tectonic/
+
+# Python cache & venv
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# Scratch & temporary drop debris
+inbox/*
+!inbox/.gitkeep

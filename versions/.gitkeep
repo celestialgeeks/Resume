@@ -1,0 +1,7 @@
+# Versions Folder
+All archived resume versions are stored here date-wise:
+versions/YYYY-MM-DD_<tag>/
+  ├── resume.tex
+  ├── resume.pdf
+  ├── preview.png
+  └── metadata.json

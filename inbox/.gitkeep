@@ -1,0 +1,4 @@
+# Inbox Folder
+Drop your new .tex and .pdf files here, then run:
+./archive.sh
+The files will be processed, indexed, archived, and cleaned up automatically.
