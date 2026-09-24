@@ -1,11 +1,12 @@
 % =====================================================================
-% Shreyash Singh — Master Resume v3 (ONE PAGE, 2026-08-25)
+% Shreyash Singh — Master Resume v4 (ONE PAGE, 2026-09-24, skills audited + ATS keywords)
 % Owner-provided structure: Contact -> Skills -> Projects (Sahaiy,
 %   Bharat Maps, Routed-Monitoring, IP-SAKTI Sahayak) ->
 %   Education (IPS Academy + IIT Madras Foundation) -> Certifications.
 % Typography hierarchy: 11pt body / LARGE bold name / scshape-bold sections
 % Margins: 0.5in sides, 0.45in top+bottom. MUST compile to exactly 1 page.
-% Facts: knowledge-pool.md only. No placeholders ship in output.
+% Facts: knowledge-pool.md only. Skills = only tech evidenced in the 4 listed projects.
+% No placeholders ship in output.
 % =====================================================================
 \documentclass[letterpaper,11pt]{article}
 
@@ -25,6 +26,7 @@
 \fi
 
 \pagestyle{empty}
+\hyphenpenalty=10000 \exhyphenpenalty=10000 \emergencystretch=1.5em
 \setlength{\parindent}{0pt}
 \setlist{leftmargin=0.18in,labelsep=0.45em,nosep,itemsep=1pt,topsep=3pt,partopsep=0pt,parsep=0pt}
 % Section heads: small caps + bold, hairline rule sits with clear space
@@ -46,20 +48,19 @@
 % ----- Skills: five compact grouped lines -----
 \section{Technical Skills}
 \begin{itemize}
-  \item \textbf{Languages:} Python, TypeScript, JavaScript, SQL, Bash
-  \item \textbf{Frontend \& Backend:} React Native, Expo, Redux Toolkit, Vite, Vanilla JS (ES Modules), FastAPI, Express,
-        REST APIs, Prisma, Supabase, PostgreSQL, MySQL, MongoDB, Redis, Kafka
-  \item \textbf{AI / LLM \& Automation:} LangChain, RAG, vector search, tool-use agents,
-        agentic workflows, multi-agent orchestration, MCP (Model Context Protocol), NumPy, Pandas,
-        n8n, context engineering
-  \item \textbf{Mobile \& Geospatial:} MapLibre GL Native, OSRM, Dead Reckoning, GNSS/IMU Data, Offline-First Design
-  \item \textbf{DevOps \& Tools:} Git, Docker, Kubernetes, GitHub Actions, Vercel, Prometheus/Grafana
+  \item \textbf{Languages:} Python, TypeScript, JavaScript, SQL, HTML5, CSS3, Bash
+  \item \textbf{Frontend:} React, Next.js, React Native, Expo, Vite, Tailwind CSS, Vanilla JS
+  \item \textbf{Backend:} FastAPI, REST APIs, Server-Sent Events (SSE), Pydantic, Supabase, PostgreSQL
+  \item \textbf{AI / LLM:} Retrieval-Augmented Generation (RAG), Vector Search, Qdrant, Semantic Embeddings, NVIDIA~NIM,
+        Ollama, Prompt Engineering, Hallucination Mitigation, Multilingual NLP (Sarvam AI)
+  \item \textbf{Mobile \& Geospatial:} Android, MapLibre GL, OSRM, Dead Reckoning, GNSS/IMU, Offline-First Design
+  \item \textbf{DevOps \& Testing:} Git, Docker, Docker Compose, Vercel, Render, GitHub Releases, Pytest
 \end{itemize}
 
 % ----- Projects: four, ordered per request (Sahaiy first, IP-SAKTI Sahayak last) -----
 \section{Projects}
 \textbf{Sahaiy -- AI Call-Agent Platform} \\
-\hspace*{0.15in}\textit{Vite 5, Vanilla JS ES Modules, Supabase (PostgreSQL, Realtime, Auth)}
+\hspace*{0.15in}\textit{Vite 5, Vanilla JS ES Modules, HTML5, CSS3, Supabase (PostgreSQL, Realtime, Auth), Vercel}
 \begin{itemize}[leftmargin=0.32in,labelsep=0.45em,itemsep=1pt,topsep=2pt,partopsep=0pt,parsep=0pt]
   \item Built and deployed a multi-page enterprise call-agent platform on Vercel with Hinglish
         (Hindi/English) UX, schema.sql bootstrap, and env-flow architecture via src/config/env.js.
@@ -69,7 +70,7 @@
 
 \vspace{1pt}
 \textbf{IP-SAKTI Sahayak -- AI Legal Intelligence Platform for Ayush IP} \\
-\hspace*{0.15in}\textit{Python, FastAPI, Next.js, TypeScript, Qdrant, NVIDIA NIM, Supabase, Docker}
+\hspace*{0.15in}\textit{Python, FastAPI, Next.js, TypeScript, Tailwind CSS, Qdrant, NVIDIA NIM, Supabase, Docker, Pytest}
 \begin{itemize}[leftmargin=0.32in,labelsep=0.45em,itemsep=1pt,topsep=2pt,partopsep=0pt,parsep=0pt]
   \item Built and deployed a citation-grounded RAG platform for patent agents and Ayush practitioners,
         delivering statutory analysis and prior-art screening (Patents Act Sec.~3(p)) over seven
@@ -83,7 +84,7 @@
 
 \vspace{1pt}
 \textbf{Bharat Maps -- Offline Dead-Reckoning Navigation for GNSS-Denied Zones} \\
-\hspace*{0.15in}\textit{React Native, Expo, JavaScript, MapLibre GL Native, OSRM, Android}
+\hspace*{0.15in}\textit{React Native, Expo, JavaScript, MapLibre GL Native, OSRM, Overpass API, Android}
 \begin{itemize}[leftmargin=0.32in,labelsep=0.45em,itemsep=1pt,topsep=2pt,partopsep=0pt,parsep=0pt]
   \item Built an offline-first Android navigation app (SIH 2026, PS~168) whose 10~Hz dead-reckoning engine detects
         GNSS outages in $\approx$0.3~s, keeps the marker moving through tunnels with a growing uncertainty ellipse,
@@ -94,7 +95,7 @@
 
 \vspace{1pt}
 \textbf{Routed-Monitoring -- Multi-Account LLM Router} \\
-\hspace*{0.15in}\textit{JavaScript}
+\hspace*{0.15in}\textit{JavaScript, Ollama, LLM Routing}
 \begin{itemize}[leftmargin=0.32in,labelsep=0.45em,itemsep=1pt,topsep=2pt,partopsep=0pt,parsep=0pt]
   \item Contributed multi-account Ollama support to the open-source Token Monitor repo, then built
         a custom fork enabling request routing across multiple Ollama accounts directly through
