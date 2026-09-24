@@ -8,6 +8,7 @@ and Markdown documentation syncing (README.md and INDEX.md).
 
 import os
 import sys
+import re
 import json
 import shutil
 import argparse
@@ -60,10 +61,146 @@ def sanitize_tag(tag: str) -> str:
     return clean or "version"
 
 
+def compile_latex(tex_path: Path):
+    """Compiles a .tex file to PDF using tectonic."""
+    tectonic_bin = shutil.which("tectonic")
+    if not tectonic_bin:
+        print("⚠️ Warning: tectonic not found in PATH.", file=sys.stderr)
+        return None
+    print(f"⚡ Compiling {tex_path.name} to PDF with Tectonic...")
+    res = subprocess.run(
+        [tectonic_bin, str(tex_path)],
+        cwd=str(tex_path.parent),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True
+    )
+    if res.returncode == 0:
+        pdf_path = tex_path.with_suffix(".pdf")
+        if pdf_path.exists():
+            print(f"✅ Successfully compiled {pdf_path.name}")
+            return pdf_path
+    print(f"⚠️ Compilation warning/error:\n{res.stderr.strip() or res.stdout.strip()}", file=sys.stderr)
+    return None
+
+
+def extract_tex_details(tex_path: Path):
+    """Extracts project titles and skills from a LaTeX resume."""
+    if not tex_path or not tex_path.exists():
+        return {"projects": [], "skills": []}
+    try:
+        content = tex_path.read_text(encoding="utf-8")
+    except Exception:
+        return {"projects": [], "skills": []}
+
+    projects = []
+    in_projects = False
+    for line in content.splitlines():
+        if r"\section{Projects}" in line:
+            in_projects = True
+            continue
+        elif in_projects and r"\section{" in line:
+            in_projects = False
+            break
+        if in_projects:
+            m = re.search(r"\\textbf\{([^}]+)\}", line)
+            if m:
+                proj_title = m.group(1).split("--")[0].split("–")[0].strip()
+                if proj_title and proj_title not in projects:
+                    projects.append(proj_title)
+
+    skills = []
+    in_skills = False
+    for line in content.splitlines():
+        if r"\section{Technical Skills}" in line or r"\section{Skills}" in line:
+            in_skills = True
+            continue
+        elif in_skills and r"\section{" in line:
+            in_skills = False
+            break
+        if in_skills:
+            m = re.findall(r"\\textbf\{([^}]+)\}:?\s*([^\\$]+)", line)
+            for category, sks in m:
+                skills.append(f"{category.strip()}: {sks.strip()[:60]}")
+
+    return {"projects": projects, "skills": skills}
+
+
+def infer_tex_changes(old_tex_path: Path, new_tex_path: Path) -> str:
+    """Infers high-level changelog between two LaTeX resumes."""
+    old_data = extract_tex_details(old_tex_path) if old_tex_path else {"projects": [], "skills": []}
+    new_data = extract_tex_details(new_tex_path) if new_tex_path else {"projects": [], "skills": []}
+
+    old_projs = set(old_data["projects"])
+    new_projs = set(new_data["projects"])
+
+    added_projs = [p for p in new_data["projects"] if p not in old_projs]
+    removed_projs = [p for p in old_data["projects"] if p not in new_projs]
+
+    parts = []
+    if added_projs and removed_projs:
+        parts.append(f"Updated projects: added {', '.join(added_projs)} (replacing {', '.join(removed_projs)})")
+    elif added_projs:
+        parts.append(f"Added project(s): {', '.join(added_projs)}")
+    elif removed_projs:
+        parts.append(f"Removed project(s): {', '.join(removed_projs)}")
+
+    if new_data["projects"] and not parts:
+        parts.append(f"Features {', '.join(new_data['projects'][:3])}")
+
+    return ". ".join(parts) if parts else "Updated resume content and formatting."
+
+
+def read_inbox_metadata():
+    """Reads optional tag.txt, desc.txt, or mode.txt from inbox/."""
+    meta = {"tag": None, "desc": None, "mode": None}
+    for tag_name in ("target.txt", "tag.txt"):
+        p = INBOX_DIR / tag_name
+        if p.exists():
+            meta["tag"] = p.read_text(encoding="utf-8").strip()
+            break
+    for desc_name in ("desc.txt", "description.txt", "notes.txt"):
+        p = INBOX_DIR / desc_name
+        if p.exists():
+            meta["desc"] = p.read_text(encoding="utf-8").strip()
+            break
+    mode_file = INBOX_DIR / "mode.txt"
+    if mode_file.exists():
+        mode_val = mode_file.read_text(encoding="utf-8").strip().lower()
+        if "master" in mode_val:
+            meta["mode"] = "master"
+        elif "version" in mode_val:
+            meta["mode"] = "version"
+    return meta
+
+
+def cleanup_inbox_processed(processed_paths):
+    """Safely cleans up processed files and metadata from inbox/."""
+    for p in processed_paths:
+        if p and os.path.exists(p):
+            p_obj = Path(p).resolve()
+            if INBOX_DIR.resolve() in p_obj.parents or p_obj.parent == INBOX_DIR.resolve():
+                if p_obj.name not in (".gitkeep", "README.md"):
+                    try:
+                        p_obj.unlink()
+                    except OSError:
+                        pass
+
+    for meta_name in ("target.txt", "tag.txt", "desc.txt", "description.txt", "notes.txt", "mode.txt"):
+        mf = INBOX_DIR / meta_name
+        if mf.exists():
+            try:
+                mf.unlink()
+            except OSError:
+                pass
+
+
 def find_inbox_files():
-    """Finds .tex and .pdf files in inbox/."""
-    tex_files = [f for f in INBOX_DIR.iterdir() if f.is_file() and f.suffix.lower() == ".tex"]
-    pdf_files = [f for f in INBOX_DIR.iterdir() if f.is_file() and f.suffix.lower() == ".pdf"]
+    """Finds .tex and .pdf files in inbox/, sorted by recent modification."""
+    tex_files = [f for f in INBOX_DIR.iterdir() if f.is_file() and f.suffix.lower() == ".tex" and not f.name.startswith(".")]
+    pdf_files = [f for f in INBOX_DIR.iterdir() if f.is_file() and f.suffix.lower() == ".pdf" and not f.name.startswith(".")]
+    tex_files.sort(key=lambda f: f.stat().st_mtime, reverse=True)
+    pdf_files.sort(key=lambda f: f.stat().st_mtime, reverse=True)
     return tex_files, pdf_files
 
 
@@ -327,18 +464,31 @@ def archive_master(tex_path=None, pdf_path=None, description=None, push=True):
     MASTER_DIR.mkdir(parents=True, exist_ok=True)
     ASSETS_DIR.mkdir(parents=True, exist_ok=True)
 
+    inbox_meta = read_inbox_metadata()
+    if not description and inbox_meta.get("desc"):
+        description = inbox_meta["desc"]
+
     # 1. Resolve tex and pdf paths
     if not tex_path or not pdf_path:
         # Check inbox first
         inbox_tex, inbox_pdf = find_inbox_files()
         if not tex_path and inbox_tex:
             tex_path = str(inbox_tex[0])
+            print(f"📂 Found LaTeX file in inbox: {os.path.basename(tex_path)}")
         if not pdf_path and inbox_pdf:
             pdf_path = str(inbox_pdf[0])
+            print(f"📂 Found PDF file in inbox: {os.path.basename(pdf_path)}")
 
     if not tex_path and (MASTER_DIR / "resume.tex").exists():
         tex_path = str(MASTER_DIR / "resume.tex")
-    
+
+    # If tex exists but no pdf, auto-compile with tectonic
+    if tex_path and os.path.exists(tex_path) and (not pdf_path or not os.path.exists(pdf_path)):
+        print("📄 Master LaTeX file found without PDF. Compiling with Tectonic...")
+        compiled_pdf = compile_latex(Path(tex_path))
+        if compiled_pdf and compiled_pdf.exists():
+            pdf_path = str(compiled_pdf)
+
     # Check if a pdf already exists in master/ (handle 'resume (2).pdf' or similar)
     if not pdf_path:
         if (MASTER_DIR / "resume.pdf").exists():
@@ -358,33 +508,28 @@ def archive_master(tex_path=None, pdf_path=None, description=None, push=True):
     dest_tex = MASTER_DIR / "resume.tex"
     dest_pdf = MASTER_DIR / "resume.pdf"
 
-    if os.path.abspath(tex_path) != os.path.abspath(dest_tex):
-        shutil.copy2(tex_path, dest_tex)
-        if str(tex_path).startswith(str(INBOX_DIR)):
-            try:
-                os.remove(tex_path)
-            except OSError:
-                pass
-
-    if os.path.abspath(pdf_path) != os.path.abspath(dest_pdf):
-        shutil.copy2(pdf_path, dest_pdf)
-        if str(pdf_path).startswith(str(INBOX_DIR)) or str(pdf_path).startswith(str(MASTER_DIR)):
-            try:
-                os.remove(pdf_path)
-            except OSError:
-                pass
-
-    # Prompt description if missing and interactive
+    # Infer description if not provided
     if not description:
-        try:
-            val = input("📝 Enter description/summary for the Master Resume: ").strip()
-            if val:
-                description = val
-        except (KeyboardInterrupt, EOFError):
-            pass
+        if (MASTER_DIR / "resume.tex").exists() and os.path.abspath(tex_path) != os.path.abspath(dest_tex):
+            description = infer_tex_changes(MASTER_DIR / "resume.tex", Path(tex_path))
+        if not description:
+            try:
+                val = input("📝 Enter description/summary for the Master Resume: ").strip()
+                if val:
+                    description = val
+            except (KeyboardInterrupt, EOFError):
+                pass
 
     if not description:
         description = "Canonical Master Resume: 4 core projects (Sahaiy, IP-SAKTI Sahayak, Bharat Maps, Routed-Monitoring), Full-Stack, AI/LLM agentic workflows, and Mobile/Geospatial engineering."
+
+    if os.path.abspath(tex_path) != os.path.abspath(dest_tex):
+        shutil.copy2(tex_path, dest_tex)
+
+    if os.path.abspath(pdf_path) != os.path.abspath(dest_pdf):
+        shutil.copy2(pdf_path, dest_pdf)
+
+    cleanup_inbox_processed([tex_path, pdf_path])
 
     # Generate preview
     print("🎨 Generating high-res preview of master PDF...")
@@ -424,14 +569,17 @@ def archive_master(tex_path=None, pdf_path=None, description=None, push=True):
     print(f"🎉 Master resume successfully updated & documented!")
     return True
 
-    print(f"🎉 Master resume successfully updated & documented!")
-    return True
-
 
 def archive_version(tex_path=None, pdf_path=None, tag=None, description=None, target_date=None, push=True):
     """Archives a customized resume version date-wise with metadata and indexing."""
     print("🚀 Archiving Tailored Resume Version...")
     VERSIONS_DIR.mkdir(parents=True, exist_ok=True)
+
+    inbox_meta = read_inbox_metadata()
+    if not tag and inbox_meta.get("tag"):
+        tag = inbox_meta["tag"]
+    if not description and inbox_meta.get("desc"):
+        description = inbox_meta["desc"]
 
     # 1. Resolve files from inbox if not explicitly given
     if not tex_path or not pdf_path:
@@ -443,11 +591,19 @@ def archive_version(tex_path=None, pdf_path=None, tag=None, description=None, ta
             pdf_path = str(inbox_pdf[0])
             print(f"📂 Found PDF file in inbox: {os.path.basename(pdf_path)}")
 
-    if not tex_path or not os.path.exists(tex_path):
-        print("❌ Error: Could not locate .tex file. Drop it into inbox/ or specify --tex <path>.")
+    # If tex exists but no pdf, auto-compile with tectonic
+    if tex_path and os.path.exists(tex_path) and (not pdf_path or not os.path.exists(pdf_path)):
+        print("📄 LaTeX file found without PDF. Compiling with Tectonic...")
+        compiled_pdf = compile_latex(Path(tex_path))
+        if compiled_pdf and compiled_pdf.exists():
+            pdf_path = str(compiled_pdf)
+
+    if not tex_path and not pdf_path:
+        print("❌ Error: Could not locate .tex or .pdf file in inbox/. Drop files into inbox/ or specify --tex/--pdf.")
         return False
+
     if not pdf_path or not os.path.exists(pdf_path):
-        print("❌ Error: Could not locate .pdf file. Drop it into inbox/ or specify --pdf <path>.")
+        print("❌ Error: Could not locate .pdf file.")
         return False
 
     # 2. Interactive prompt for missing info if in interactive terminal
@@ -461,11 +617,18 @@ def archive_version(tex_path=None, pdf_path=None, tag=None, description=None, ta
             return False
 
     if not description:
-        try:
-            description = input("📝 Describe the key changes made: ").strip()
-        except (KeyboardInterrupt, EOFError):
-            print("\nAborted.")
-            return False
+        # Try inferring from LaTeX diff against master
+        master_tex = (MASTER_DIR / "resume.tex") if (MASTER_DIR / "resume.tex").exists() else None
+        if tex_path and master_tex:
+            description = infer_tex_changes(master_tex, Path(tex_path))
+        if not description:
+            try:
+                val = input("📝 Describe the key changes made: ").strip()
+                if val:
+                    description = val
+            except (KeyboardInterrupt, EOFError):
+                print("\nAborted.")
+                return False
 
     if not description:
         description = "Tailored resume version."
@@ -490,20 +653,12 @@ def archive_version(tex_path=None, pdf_path=None, tag=None, description=None, ta
     dest_pdf = dest_dir / "resume.pdf"
     dest_preview = dest_dir / "preview.png"
 
-    shutil.copy2(tex_path, dest_tex)
-    shutil.copy2(pdf_path, dest_pdf)
+    if tex_path and os.path.exists(tex_path):
+        shutil.copy2(tex_path, dest_tex)
+    if pdf_path and os.path.exists(pdf_path):
+        shutil.copy2(pdf_path, dest_pdf)
 
-    # Clean up inbox if files originated there
-    if str(tex_path).startswith(str(INBOX_DIR)):
-        try:
-            os.remove(tex_path)
-        except OSError:
-            pass
-    if str(pdf_path).startswith(str(INBOX_DIR)):
-        try:
-            os.remove(pdf_path)
-        except OSError:
-            pass
+    cleanup_inbox_processed([tex_path, pdf_path])
 
     # 5. Generate thumbnail preview
     if generate_preview:
@@ -511,8 +666,8 @@ def archive_version(tex_path=None, pdf_path=None, tag=None, description=None, ta
 
     # 6. Create version metadata.json
     now_iso = datetime.now().isoformat()
-    rel_tex = f"versions/{dest_dir.name}/resume.tex"
-    rel_pdf = f"versions/{dest_dir.name}/resume.pdf"
+    rel_tex = f"versions/{dest_dir.name}/resume.tex" if dest_tex.exists() else None
+    rel_pdf = f"versions/{dest_dir.name}/resume.pdf" if dest_pdf.exists() else None
     rel_prev = f"versions/{dest_dir.name}/preview.png" if dest_preview.exists() else None
 
     meta = {
@@ -577,6 +732,10 @@ def main():
         return
 
     push_to_git = not args.no_push
+
+    inbox_meta = read_inbox_metadata()
+    if not args.master and not args.tag and inbox_meta.get("mode") == "master":
+        args.master = True
 
     if args.master:
         archive_master(tex_path=args.tex, pdf_path=args.pdf, description=args.desc, push=push_to_git)

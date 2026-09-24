@@ -40,3 +40,4 @@ env/
 # Scratch & temporary drop debris
 inbox/*
 !inbox/.gitkeep
+!inbox/README.md

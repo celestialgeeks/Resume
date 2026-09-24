@@ -30,18 +30,20 @@ def main():
     try:
         while True:
             tex_files, pdf_files = check_inbox()
-            if tex_files and pdf_files:
-                tex = tex_files[0]
-                pdf = pdf_files[0]
-                pair_key = f"{tex.name}:{pdf.name}:{tex.stat().st_mtime}:{pdf.stat().st_mtime}"
+            if tex_files or pdf_files:
+                detected_names = [f.name for f in tex_files + pdf_files]
+                mtimes = [str(f.stat().st_mtime) for f in tex_files + pdf_files]
+                batch_key = ":".join(detected_names + mtimes)
                 
-                if pair_key not in processed_pairs:
-                    print(f"\n🔔 New resume pair detected in inbox/!")
-                    print(f"   - LaTeX: {tex.name}")
-                    print(f"   - PDF:   {pdf.name}")
+                if batch_key not in processed_pairs:
+                    print(f"\n🔔 New resume file(s) detected in inbox/!")
+                    for f in tex_files:
+                        print(f"   - LaTeX: {f.name}")
+                    for f in pdf_files:
+                        print(f"   - PDF:   {f.name}")
                     print("\nStarting intake assistant...\n")
                     subprocess.run([sys.executable, str(ARCHIVE_SCRIPT)])
-                    processed_pairs.add(pair_key)
+                    processed_pairs.add(batch_key)
             time.sleep(2)
     except KeyboardInterrupt:
         print("\nStopped inbox watcher.")
