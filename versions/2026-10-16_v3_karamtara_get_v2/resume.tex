@@ -1,0 +1,122 @@
+% =====================================================================
+% Shreyash Singh — Targeted resume: Karamtara Engineering Ltd, Graduate
+%   Engineer Trainee (GET), IPSA closed campus drive, B.Tech 2027 batch.
+% LAYOUT IS MASTER v4, FIELD FOR FIELD (owner instruction 2026-10-16):
+%   Contact -> Technical Skills (6 labelled lines, same labels, same order)
+%   -> Projects (same 4 projects, same order, title + italic stack + bullets)
+%   -> Education (same 5 lines) -> Certifications (same 1 line).
+%   Only the CONTENT inside those fields is optimised for this employer:
+%   fabrication-plant vocabulary (records, monitoring, downtime, offline
+%   field conditions, verification gates, vernacular users), CGPA 7.12,
+%   IoT cert expanded to the credits/4-credit line. No section added,
+%   removed, or moved. Must compile to exactly 1 page.
+% Facts: jobs.db `facts` + knowledge-pool.md only.
+% =====================================================================
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage{titlesec}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage[fleqn]{amsmath}
+\usepackage[english]{babel}
+\usepackage{geometry}
+\geometry{letterpaper,left=0.5in,right=0.5in,top=0.45in,bottom=0.4in}
+
+\ifdefined\pdfgentounicode
+  \input{glyphtounicode}
+  \pdfgentounicode=1
+\fi
+
+\pagestyle{empty}
+\hyphenpenalty=10000 \exhyphenpenalty=10000 \emergencystretch=1.5em
+\setlength{\parindent}{0pt}
+\setlist{leftmargin=0.18in,labelsep=0.45em,nosep,itemsep=1pt,topsep=3pt,partopsep=0pt,parsep=0pt}
+% Section heads: small caps + bold, hairline rule sits with clear space
+% below the title text (no negative pull so descenders like the "j" in
+% "Projects" are never sliced), then a controlled gap before body content.
+\titleformat{\section}{\raggedright\scshape\bfseries\large}{}{0em}{}[{\vspace{1pt}\color{black}\titlerule[0.7pt]}]
+\titlespacing{\section}{0pt}{6pt}{4pt}
+
+\begin{document}
+
+% ----- Contact: two stacked lines to avoid overfull hbox -----
+\begin{center}
+  {\LARGE \bfseries Shreyash Singh}\\[3pt]
+  \href{mailto:shreyashsingh755@gmail.com}{shreyashsingh755@gmail.com} \,$|$\, +91-9302940213 \\
+  \href{https://linkedin.com/in/shreyash-singh755}{linkedin.com/in/shreyash-singh755} \,$|$\,
+  \href{https://github.com/celestialgeeks}{github.com/celestialgeeks} \,$|$\, Indore, India
+\end{center}
+
+% ----- Skills: same six labelled lines, contents re-ordered per the drive -----
+\section{Technical Skills}
+\begin{itemize}
+  \item \textbf{Languages:} Python, SQL, TypeScript, JavaScript, Bash, HTML5, CSS3
+  \item \textbf{Frontend:} React Native, Expo, Next.js, React, Vite, Tailwind CSS, Vanilla JS
+  \item \textbf{Backend:} PostgreSQL, Supabase, FastAPI, REST APIs, Server-Sent Events (SSE), Pydantic
+  \item \textbf{AI / LLM:} Retrieval-Augmented Generation (RAG), Vector Search, Qdrant, Semantic Embeddings,
+        NVIDIA~NIM, Ollama, Multilingual NLP (Sarvam AI)
+  \item \textbf{Mobile \& Geospatial:} GNSS/IMU sensor data, Dead Reckoning, Offline-First Design, Android,
+        MapLibre GL, OSRM
+  \item \textbf{DevOps \& Testing:} Pytest, Docker, Docker Compose, Git, GitHub Releases, Vercel, Render
+\end{itemize}
+
+% ----- Projects: same four, same order; bullets rewritten as -----
+% ----- problem -> action -> verifiable outcome -> owned responsibility -----
+\section{Projects}
+\textbf{Sahaiy -- AI Call-Agent Platform for Vernacular Field Users} \\
+\hspace*{0.15in}\textit{Vite 5, Vanilla JS ES Modules, HTML5, CSS3, Supabase (PostgreSQL, Realtime, Auth), Vercel}
+\begin{itemize}[leftmargin=0.32in,labelsep=0.45em,itemsep=1pt,topsep=2pt,partopsep=0pt,parsep=0pt]
+  \item Built and deployed a multi-page call-agent platform on Vercel with Hinglish (Hindi/English) UX for
+        users not comfortable with English-only software, realtime database updates, and an env-flow
+        architecture so each deployment is configured rather than re-coded.
+\end{itemize}
+
+\vspace{1pt}
+\textbf{IP-SAKTI Sahayak -- Verified Records Search for Regulated Ayush IP Data} \\
+\hspace*{0.15in}\textit{Python, FastAPI, Next.js, TypeScript, Tailwind CSS, Qdrant, NVIDIA NIM, Supabase, Docker, Pytest}
+\begin{itemize}[leftmargin=0.32in,labelsep=0.45em,itemsep=1pt,topsep=2pt,partopsep=0pt,parsep=0pt]
+  \item Built and deployed a citation-grounded RAG platform for patent agents and Ayush practitioners,
+        answering statutory questions (Patents Act Sec.~3(p), Biological Diversity Act ABS) only from the
+        correct jurisdiction's records across seven segregated Qdrant collections (2048-dim NVIDIA Nemotron
+        embeddings).
+  \item Engineered a deterministic citation verifier and a multi-factor confidence scorer (similarity,
+        citation coverage, source authority) so an answer whose citation does not resolve is refused rather
+        than displayed -- the auditability a quality record needs.
+  \item Integrated Sarvam AI for queries in 22 Indic languages; containerized with Docker, tested with Pytest.
+\end{itemize}
+
+\vspace{1pt}
+\textbf{Bharat Maps -- Offline Positioning for GNSS-Denied, Low-Connectivity Field Conditions} \\
+\hspace*{0.15in}\textit{React Native, Expo, JavaScript, MapLibre GL Native, OSRM, Overpass API, Android}
+\begin{itemize}[leftmargin=0.32in,labelsep=0.45em,itemsep=1pt,topsep=2pt,partopsep=0pt,parsep=0pt]
+  \item Built an offline-first Android navigation app (SIH 2026, PS~168) for sites where the sensor feed
+        drops: a 10~Hz dead-reckoning engine detects a GNSS outage in $\approx$0.3~s and carries the marker
+        across the gap on a growing uncertainty ellipse, rejoining the fix in 1~s.
+  \item Scored drift against ground truth on a 10~Hz replay benchmark (target $<$10\% over 60~s); shipped
+        MapLibre vector maps, OSRM routing and signed-APK OTA updates behind a pre-publish verification gate.
+\end{itemize}
+
+\vspace{1pt}
+\textbf{Routed-Monitoring -- Usage Monitoring and Routing Across Shared Resources} \\
+\hspace*{0.15in}\textit{JavaScript, Ollama, LLM Routing}
+\begin{itemize}[leftmargin=0.32in,labelsep=0.45em,itemsep=1pt,topsep=2pt,partopsep=0pt,parsep=0pt]
+  \item Contributed multi-account Ollama support to the open-source Token Monitor repo, then built a custom
+        fork routing requests across multiple accounts through its UI.
+  \item Extended the UI to track consumption and rate limits across 28+ AI coding tools with multi-device sync.
+\end{itemize}
+
+% ----- Education: same five lines, updated CGPA and backlog status -----
+\section{Education}
+\textbf{B.Tech, Computer Science \& Engineering (AI \& ML)} \hfill \textbf{Expected Jun 2027} \\
+IPS Academy, Indore -- RGPV University \hfill CGPA: 7.12/10 (71.2\%), no active backlogs \\
+\textit{Coursework:} DBMS $\cdot$ Operating Systems $\cdot$ DSA $\cdot$ Machine Learning $\cdot$ Distributed Systems \\[3pt]
+\textbf{BS in Data Science \& Applications -- Foundation Level} \hfill \textbf{Expected Sep 2026} \\
+Indian Institute of Technology (IIT) Madras \hfill CGPA: 6.2/10
+
+% ----- Certifications: same single line, IoT detail expanded -----
+\section{Certifications}
+\textbf{Introduction to Internet of Things} -- NPTEL, IIT Kharagpur \textit{(Elite, 66\%, 4 credits)} \hfill Jan--Apr 2026
+
+\end{document}

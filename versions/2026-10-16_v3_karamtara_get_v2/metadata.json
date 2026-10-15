@@ -1,0 +1,12 @@
+{
+  "id": "2026-10-16_v3_karamtara_get_v2",
+  "date": "2026-10-16",
+  "timestamp": "2026-10-16T04:36:36.585181",
+  "tag": "v3_karamtara_get",
+  "description": "Karamtara Engineering GET (IPSA closed drive). v3 revised to owner instruction: master v4 layout kept field-for-field (Contact > Technical Skills > Projects > Education > Certifications, same 4 projects in same order); only content optimised - plant/records/verification vocabulary in every bullet, offline field-condition framing on Bharat Maps, auditability framing on IP-SAKTI, SQL and PostgreSQL promoted in Languages/Backend, GNSS-IMU sensor data leading Mobile & Geospatial, CGPA 7.12/10 (71.2%) with no active backlogs, NPTEL IoT cert with 4 credits. One page, no overflow.",
+  "files": {
+    "tex": "versions/2026-10-16_v3_karamtara_get_v2/resume.tex",
+    "pdf": "versions/2026-10-16_v3_karamtara_get_v2/resume.pdf",
+    "preview": "versions/2026-10-16_v3_karamtara_get_v2/preview.png"
+  }
+}
