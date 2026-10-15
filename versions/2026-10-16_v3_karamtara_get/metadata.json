@@ -1,0 +1,12 @@
+{
+  "id": "2026-10-16_v3_karamtara_get",
+  "date": "2026-10-16",
+  "timestamp": "2026-10-16T04:28:16.963279",
+  "tag": "v3_karamtara_get",
+  "description": "Karamtara Engineering GET (IPSA closed campus drive, B.Tech 2027). Material re-target: education and certifications promoted above skills (60% aggregate is the knockout), new Target block naming the three plants and June 2027 availability, project set reordered with Sentinel restored and Routed-Monitoring/Poymarket cut, bullets rewritten as problem-action-outcome-trainee-responsibility, employer vocabulary mirrored (records, dashboards, downtime, ERP/BOM traceability, IoT sensors), jargon wall removed, bio-data fields and CGPA 7.12/71.2% printed. Master v4 typesetting unchanged; one page.",
+  "files": {
+    "tex": "versions/2026-10-16_v3_karamtara_get/resume.tex",
+    "pdf": "versions/2026-10-16_v3_karamtara_get/resume.pdf",
+    "preview": "versions/2026-10-16_v3_karamtara_get/preview.png"
+  }
+}
